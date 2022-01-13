@@ -1,2 +1,1 @@
 # KingoftheForestCoin
-# KingoftheForestCoin
