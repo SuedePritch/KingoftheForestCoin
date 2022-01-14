@@ -1,5 +1,6 @@
 const KingOfTheForestCoin = artifacts.require("./KingOfTheForestCoin.sol");
 
 module.exports = function (deployer) {
-  deployer.deploy(KingOfTheForestCoin);
+  deployer.deploy(KingOfTheForestCoin, 100000);
 };
+

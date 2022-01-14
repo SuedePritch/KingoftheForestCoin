@@ -12,6 +12,8 @@
   },
   "author": "James_Pritchard",
   "license": "ISC",
-  "bugs": {
+  "bugs": {},
+  "dependencies": {
+    "web3": "^1.6.1"
   }
 }
