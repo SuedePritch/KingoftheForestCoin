@@ -24,10 +24,10 @@ contract ('KingOfTheForestCoin', function(accounts){
             tokenInstance = instance;
             return tokenInstance.totalSupply();
         }).then(function(totalSupply){
-            assert.equal(totalSupply.toNumber(), 100, 'set supply to 100000');
+            assert.equal(totalSupply.toNumber(), 1000000, 'set supply to 100000');
             return tokenInstance.balanceOf(accounts[0]);
         }).then(function(adminBalance){
-            assert.equal(adminBalance.toNumber(), 100, 'it allocates initial supply to admin account');
+            assert.equal(adminBalance.toNumber(), 1000000, 'it allocates initial supply to admin account');
 
         });
     });
@@ -55,7 +55,7 @@ contract ('KingOfTheForestCoin', function(accounts){
             assert.equal(balance.toNumber(), 25, 'adds amount to recieving account');
             return tokenInstance.balanceOf(accounts[0]);
         }).then(function(balance){
-            assert.equal(balance.toNumber(), 75, 'deducts the amount from sender account');
+            assert.equal(balance.toNumber(), 999975, 'deducts the amount from sender account');
         });
     });
 
