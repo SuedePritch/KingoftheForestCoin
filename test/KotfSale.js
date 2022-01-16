@@ -61,5 +61,29 @@ contract('KotfSale', function(accounts){
         }).then(assert.fail).catch(function(error) {
             assert(error.message.indexOf('revert') >= 0, 'cannot purchase more tokens than available');
         });
-      });
+    });
+
+    it('ends token sale', function(){
+        return KingOfTheForestCoin.deployed().then(function(instance) {
+            // Grab token instance first
+            tokenInstance = instance;
+            return KotfSale.deployed();
+        }).then(function(instance) {
+            // Then grab token sale instance
+            tokenSaleInstance = instance;  
+            //try to end sale from unathorized account
+            return tokenSaleInstance.endSale({from: buyer});
+        }).then(assert.fail).catch(function(error) {
+            assert(error.message.indexOf('revert') >= 0, 'must be admin to end sale');
+            return tokenSaleInstance.endSale({ from: admin });
+        }).then(function(receipt) {
+            return tokenInstance.balanceOf(admin);
+        }).then(function(balance) {
+            assert.equal(balance.toNumber(), 999990, 'returns all unsold tokens to admin');
+            // Check that the contract has no balance
+            return balance = web3.eth.getBalance(tokenSaleInstance.address);
+        }).then(function(balance) {
+            assert.equal(balance, 0);
+    });
+});
 });

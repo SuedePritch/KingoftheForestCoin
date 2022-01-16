@@ -38,4 +38,15 @@ contract KotfSale {
 
 
     }
+
+
+    //Ending Token Sale
+    function endSale() public{
+        //only admin can end sale
+        require(msg.sender == admin);
+        //transfer the remaining tokens to admin
+        require(tokenContract.transfer(admin, tokenContract.balanceOf(address(this))));
+        
+        payable(admin).transfer(address(this).balance);
+    }
 }
