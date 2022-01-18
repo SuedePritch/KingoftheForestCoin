@@ -1,0 +1,2 @@
+//get first account in ganache
+admin = web3.eth.getAccounts().then(e=>e[0])

@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity >=0.4.22 <0.9.0;
+pragma solidity >=0.5.0 <0.9.0;
 import "./KingOfTheForestCoin.sol";
 
 contract KotfSale {
@@ -25,15 +25,10 @@ contract KotfSale {
     }
 
     function buyTokens(uint256 _numberOfTokens) public payable{
-        //require number of tokens * sale price
         require(msg.value == multiply(_numberOfTokens, tokenPrice));
-        //require that enough tokens in contract to complete sale
         require(tokenContract.balanceOf(address(this)) >= _numberOfTokens);
-        //require that transfer is successful
         require(tokenContract.transfer(msg.sender, _numberOfTokens));
-        //how many tokens have been sold
         tokensSold += _numberOfTokens;
-        //emit sell event
         emit Sell(msg.sender,_numberOfTokens);
 
 
