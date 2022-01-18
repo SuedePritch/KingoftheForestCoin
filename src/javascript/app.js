@@ -7,6 +7,7 @@ App = {
     tokenPrice: 1000000000000000,
     tokensSold:0,
     tokensAvailable:800000,
+    KotfSaleInstance: null,
     load:async ()=>{
         //Load App
         await App.loadWeb3()
@@ -15,6 +16,8 @@ App = {
         await App.render()
         web3.eth.defaultAccount = web3.eth.accounts[0]
     },
+
+
     // https://medium.com/metamask/https-medium-com-metamask-breaking-change-injecting-web3-7722797916a8
     loadWeb3: async () => {
         if (typeof web3 !== 'undefined') {
@@ -31,10 +34,10 @@ App = {
             await ethereum.enable()
             // Acccounts now exposed
             web3.eth.sendTransaction({/* ... */})
-            } catch (error) {
+        } catch (error) {
             // User denied account access...
-            }
         }
+    }
         // Legacy dapp browsers...
         else if (window.web3) {
             App.web3Provider = web3.currentProvider
@@ -47,7 +50,7 @@ App = {
             console.log('Non-Ethereum browser detected. You should consider trying MetaMask!')
         }
     },
-
+    
     loadAccount: async () =>{
         App.account = web3.eth.accounts[0]
     },
@@ -57,19 +60,33 @@ App = {
         App.contracts.KingOfTheForestCoin.setProvider(App.web3Provider)
         App.KingOfTheForestCoin = await App.contracts.KingOfTheForestCoin.deployed()
         .then(function(KingOfTheForestCoin){
-
+            
             console.log("King of the Forest Coin address:", KingOfTheForestCoin.address);
         }) 
         const  KotfSale= await $.getJSON('KotfSale.json')
         App.contracts.KotfSale = TruffleContract(KotfSale)
         App.contracts.KotfSale.setProvider(App.web3Provider)
         App.KotfSale = await App.contracts.KotfSale.deployed().then(function(KotfSale){
-
+            
             console.log("King of the Forest Sale address:", KotfSale.address);
         });
+        // App.listenToEvents();
         return App.render(); 
         
     },
+    // listenToEvents: function() {
+    //     App.contracts.KotfSale.deployed().then(function(instance) {
+    //     instance.Sell({}, {
+    //         fromBlock: 0,
+    //         toBlock: 'latest',
+    //     }).events(function(error, event) {
+    //         console.log("event triggered", event);
+    //         App.render();
+    //     })
+    //     })
+    // },
+
+
     render: async () =>{
         if (App.loading){
             return
@@ -91,6 +108,7 @@ App = {
             $('.token-price').html(web3.utils.fromWei(App.tokenPrice, "ether"));
             return KotfSaleInstance.tokensSold();
         }).then(function(tokensSold){
+            App.tokensSold = tokensSold.toNumber();
             $('.tokens-sold').html(App.tokensSold);
             $('.tokens-available').html(App.tokensAvailable);
 
@@ -108,13 +126,13 @@ App = {
             App.setLoading(false)
         });
         },
-
-    buyTokens: function(){
+    
+    buyTokens: async() => {
         $('#content').hide();
         $('#loader').show();
 
         var numberOfTokens = $('#numberOfTokens').val();
-        App.contracts.KotfSale.deployed().then(function(instance){
+        await App.contracts.KotfSale.deployed().then(function(instance){
             KotfSaleInstance = instance;
             return KotfSaleInstance.buyTokens(numberOfTokens, {
                 from: App.account,
@@ -124,8 +142,8 @@ App = {
         }).then(function(result){
             console.log("tokens purchased")
             $('form').trigger('reset');
-            $('#loader').hide();
-            $('#content').show();
+            //wait for sell event
+            return App.render();
 
         })
     },    
