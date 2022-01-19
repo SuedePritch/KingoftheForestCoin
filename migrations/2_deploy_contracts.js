@@ -8,7 +8,7 @@ module.exports = function (deployer) {
   
   }).then(function() {
     var tokensAvailable = 800000;
-    KingOfTheForestCoin.deployed().then(function(instance) { instance.transfer(KotfSale.address, tokensAvailable, { from: '0xD6f7B293D104c14167b0224F06026C8B89bE8C0f' }); })
+    KingOfTheForestCoin.deployed().then(function(instance) { instance.transfer(KotfSale.address, tokensAvailable, { from: admin }); })
 });
 
 };
