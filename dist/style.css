@@ -1,0 +1,47 @@
+::root{
+    --colour-primary-500: hsl(152, 90%, 50%);
+}
+
+::before,
+::after,
+*{
+    margin:0;
+    padding:0;
+    box-sizing: border-box;
+}
+html,
+body{
+    background: hsl(0, 0%, 80%);
+}
+.container,
+.title{
+    background: hsl(0, 0%, 80%);
+    color: hsl(0, 0%, 8%);
+}
+.title{
+    display: flex;
+    justify-content: space-between;
+    text-align: left;
+    flex-wrap: wrap;
+    padding:1rem;
+}
+.account{
+    display: flex;
+    flex-direction: column;
+    justify-content: right;
+    font-size: 16px;
+    text-align: right;
+}
+#accountAddress{
+    font-size:10px;
+    padding-top: 1.5rem;
+    padding-bottom: 0.5rem;
+}
+.content{
+    padding: 1.5rem 1.2rem;
+}
+
+.form-group{
+    padding: 1rem 0;
+    width:50%;
+}
